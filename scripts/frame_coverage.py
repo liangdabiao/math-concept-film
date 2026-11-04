@@ -2,7 +2,7 @@
 """frame_coverage.py —— 版面利用率抽帧检查（吸引力宪法#6）。
 
 用法：
-    python frame_coverage.py <video.mp4> [--every 4] [--min 55]
+    python frame_coverage.py <video.mp4> [--every 8] [--min 35]
 
 从视频均匀抽帧，逐帧计算"内容包围盒占画幅比例"：
   内容像素 = 与宣纸底色 #f3ecd8 色差超过阈值的像素（含墨迹/色块/字幕）。
@@ -75,14 +75,14 @@ def coverage_of_frame(png: str) -> float:
 def main() -> int:
     args = sys.argv[1:]
     video = args[0] if args else ""
-    every = 4.0
+    every = 8.0
     min_ratio = MIN_RATIO
     if "--every" in args:
         every = float(args[args.index("--every") + 1])
     if "--min" in args:
         min_ratio = float(args[args.index("--min") + 1])
     if not video or not Path(video).exists():
-        print("usage: python frame_coverage.py <video.mp4> [--every 4] [--min 55]")
+        print("usage: python frame_coverage.py <video.mp4> [--every 8] [--min 35]")
         return 1
 
     dur = duration_of(video)

@@ -67,12 +67,11 @@ python <skill>/scripts/preflight.py film.py captions/aligned.json
 python <skill>/scripts/check_film.py film.py lines.json captions/aligned.json   # 有 cap_block 时
 # ⑤ 渲染（render.py 内部 chdir+清缓存+日志直写，免踩 cwd/管道坑）
 python <skill>/scripts/render.py <项目目录> <SceneName> --mux
-# ⑥ 静帧自检 + 导演 pass：
-#    a. 抽帧每幕首/中/尾+关键动作段，逐帧看：硬伤必修
-#    b. frame_coverage.py 查版面利用率
+# ⑥ 静帧自检（一轮，快）：抽 ≤8 张代表帧（每幕挑首/中/尾一处+关键动作），一次看完
 python <skill>/scripts/frame_coverage.py media/videos/film/480p15/<SceneName>.mp4
-#    c. 导演 pass：以观众视角过一遍每幕——"想继续看吗"打分，<3 分的幕重设计
-#    d. 有问题改 film.py → 只重跑 ⑤（最多两轮，第二轮剩小瑕疵即交付）
+#    只修硬伤：大面积遮挡 / 图形画错 / 越界 / 数字或序列错 / 字幕丢失。
+#    软瑕疵（轻微贴边/偏移/审美不满）一律放过——质量影响小、时间代价大。
+#    有硬伤改 film.py → 只重跑 ⑤（修复一轮封顶；第二轮出来即交付，不追完美）
 # ⑦ 交付：final.mp4 路径、时长、每幕讲了什么
 ```
 
@@ -141,8 +140,9 @@ python <skill>/scripts/frame_coverage.py media/videos/film/480p15/<SceneName>.mp
 
 ## 放行标准（交付前逐条打勾）
 
-**防错组**（preflight/check_film 全绿；抽帧无大面积遮挡/画错/重叠/越界；
-final 时长 = 配音 +2s 左右；画面数字全验算；字幕挂接正确；相机零 `.animate`）
+**防错组**（preflight/check_film 全绿；抽帧一轮无硬伤（大面积遮挡/画错/越界/
+数字序列错/字幕丢失）；final 时长 = 配音 +2s 左右；画面数字全验算；
+字幕挂接正确；相机零 `.animate`；快进过一遍无明显观感事故）
 
 **吸引力组**（任何一条不过 = 返工，与画错同级）：
 - [ ] 前 5 秒有动画在进行（非静态标题）
@@ -151,7 +151,18 @@ final 时长 = 配音 +2s 左右；画面数字全验算；字幕挂接正确；
 - [ ] 全片有快慢节奏对比，有高潮定格 ≥2s
 - [ ] frame_coverage 版面利用率：平均 ≥35%，无连续 <20% 空旷帧
 - [ ] 字幕每行 ≤18 字 ×≤2 行
-- [ ] 导演 pass：每幕"想继续看吗"≥3 分
+
+## 速度纪律（2026-11 超时事故后确立；渲染配音都是秒级，超时=迭代轮数失控）
+
+1. **新几何构造先测帧**：手推坐标的图形/拼图目标位，先写 3 行测试场景渲一帧
+   看几何正确，再进正片（同"新字符先测帧"纪律）。
+2. **阈值先测基线再定标**：任何量化指标（版面/占比/时长），先跑一遍量出真实分布
+   再定红线，禁止拍脑袋定标后反复改口。
+3. **一部片 ≤3 次渲染、≤2 轮抽帧**：第 2 轮修复后剩软瑕疵 = 直接交付。
+4. **构图第一版就做大**：图形尺寸按"场景宽 60%+"取，宁大勿小；不要事后用 zoom 补救
+   （数学片可 zoom 救场，注意底部元素 ×zoom 会压字幕带；DS 片走 preflight 边界，改 unit）。
+5. 删代码用**函数名精确锚点**；CAP 字典**只拼接 cap_block.py** 不手写；迁移契约类
+   （FilmClock/T/caption）整段拷贝。
 
 ## 环境安装（首次使用）
 
