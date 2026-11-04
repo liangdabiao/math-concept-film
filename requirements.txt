@@ -1,0 +1,9 @@
+# math-concept-film 依赖 —— 一条命令装齐：
+#   pip install -r requirements.txt
+#
+# manim 自带 PyAV（FFmpeg 编解码库），渲染不需要系统 ffmpeg。
+# imageio-ffmpeg 为本技能的音频脚本提供 ffmpeg 可执行文件兜底。
+# 刻意不含 LaTeX：本技能公式走 Text+Unicode，永远不需要它。
+manim>=0.19
+edge-tts>=6.1
+imageio-ffmpeg>=0.5
