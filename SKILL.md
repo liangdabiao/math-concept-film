@@ -135,8 +135,8 @@ python <skill>/scripts/frame_coverage.py media/videos/film/480p15/<SceneName>.mp
 | 相机 | 开场 `set_camera_orientation`；运镜只许 `move_camera`（punch_in/pull_back 助手）；禁止 `.animate` 相机 |
 | 字幕 | 底部字幕条硬切（caption()）；每行 ≤18 字 ×2 行 |
 | 配音 | edge-tts `zh-CN-YunyangNeural` +12%（默认）；换声 `--voice` |
-| **动效负面清单** | **禁**：大幅旋转飞入（>90° 转圈进）、剧烈弹跳（多次 overshoot 晃动）、无意义晃动、五色同场、相机全程乱动。<br>**放**：Write 逐笔写、LaggedStart 齿落、TracedPath 墨迹拖尾、ShowPassingFlash 流光、Indicate/Circumscribe 强调、squash 小弹(scale 1.2 缩入)、rate_functions 节奏对比(rush_from/rush_into/lingering)、updaters 跟随、move_camera 推拉。克制的是**色彩**，不是**动作** |
-| 节奏 | 负面清单外的入场 0.4~1.2s；快节拍 0.4~0.6s；定格蓄力 1.5~2s；幕末 0.5s 缓冲 |
+| **动效负面清单** | **禁**：大幅旋转飞入（>90° 转圈进）、剧烈弹跳（多次 overshoot 晃动）、无意义晃动、五色同场、相机全程乱动、**全屏吞没式转场（墨盘/闪白闪黑——闪眼，2026-11 用户反馈废除）**。<br>**放**：Write 逐笔写、LaggedStart 齿落、TracedPath 墨迹拖尾、ShowPassingFlash 流光、Indicate/Circumscribe 强调、squash 小弹(scale 1.2 缩入)、rate_functions 节奏对比(rush_from/rush_into/lingering)、updaters 跟随、move_camera 推拉。克制的是**色彩**，不是**动作** |
+| 节奏 | 负面清单外的入场 0.4~1.2s；快节拍 0.4~0.6s；定格蓄力 1.5~2s；幕末 0.5s 缓冲；换幕一律快速淡出（_wipe 0.3~0.5s），禁止转场动效 |
 | 禁项 | 无文件 IO、无网络、随机必须给种子、单一 Scene 类、无 LaTeX |
 
 ## 放行标准（交付前逐条打勾）

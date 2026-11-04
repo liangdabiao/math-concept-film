@@ -11,7 +11,9 @@ v2 新增（吸引力层，2026-11）：
       ShowPassingFlash/Indicate/rate_functions/updaters 全部放开
     * 节奏对比：快节拍(0.4~0.6s) ↔ 定格蓄力(1.5~2s)，每片至少一处高潮定格
     * 表现力助手（全部自动记账时钟）：write_in / pop_in / lagged_in /
-      traced_move / sweep / indicate / burst / ink_iris / punch_in / pull_back
+      traced_move / sweep / indicate / burst / punch_in / pull_back
+    * 幕间转场：只用快速淡出（_wipe，0.3~0.5s）；全屏吞没式转场（墨盘/
+      闪白闪黑）闪眼，已废除，不要发明新转场
 
 硬约束速记（完整版见 references/scene-contract.md）：
     * 只用 ThreeDScene；开场 set_camera_orientation，运镜 move_camera，
@@ -209,22 +211,6 @@ def burst(scene: ThreeDScene, center, color: str = STONE, rt: float = 0.9,
                   else np.array(center, dtype=float))
     scene.play(*[r.animate.scale(2.4).set_stroke(opacity=0) for r in group],
                run_time=rt, rate_func=rush_from)
-    scene._t += rt
-
-
-def ink_iris(scene: ThreeDScene, rt: float = 0.4) -> Mobject:
-    """墨渍幕间转场·上：墨色圆盘扩张吞没画面。返回圆盘。(+rt)
-    用法：disc = ink_iris(self); 静默 add 新幕内容; ink_iris_out(self, disc)"""
-    disc = Circle(radius=8.5, color=INK, fill_opacity=1.0, stroke_opacity=0)
-    disc.move_to(ORIGIN)
-    scene.play(GrowFromCenter(disc), run_time=rt, rate_func=smooth)
-    scene._t += rt
-    return disc
-
-
-def ink_iris_out(scene: ThreeDScene, disc: Mobject, rt: float = 0.4) -> None:
-    """墨渍转场·下：圆盘旋出消散，新幕显露。(+rt)"""
-    scene.play(FadeOut(disc, scale=0.4), run_time=rt, rate_func=rush_from)
     scene._t += rt
 
 
